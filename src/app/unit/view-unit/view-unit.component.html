@@ -1,0 +1,66 @@
+<p-card header="Unit List" class="view-screen">
+
+    <!-- TOP BAR -->
+    <div class="filter-bar">
+
+        <!-- SEARCH BOX -->
+        <div class="search-box">
+            <span class="pi pi-search search-icon"></span>
+            <input 
+                pInputText 
+                type="text" 
+                placeholder="Search Unit..."
+                [(ngModel)]="searchText" 
+                (input)="applyFilters()" 
+            />
+        </div>
+ <!-- -->
+
+
+        <!-- ADD BUTTON -->
+        <button 
+            pButton 
+            label="Add Unit" 
+            icon="pi pi-plus" 
+            class="p-button-success add-btn"
+            (click)="addUnit()">
+        </button>
+
+    </div>
+
+    <!-- TABLE -->
+    <p-table [value]="filteredUnits" [scrollable]="true" scrollHeight="60vh">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>S.No</th>
+                <th>Unit Name</th>
+                <th>Short Name</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-unit let-i="rowIndex">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ unit.name }}</td>
+                <td>{{ unit.short_name }}</td>
+                <td>
+                    <button 
+                        pButton 
+                        icon="pi pi-pencil" 
+                        class="p-button-text" 
+                        (click)="editUnit(unit)">
+                    </button>
+
+                    <button 
+                        pButton 
+                        icon="pi pi-trash" 
+                        class="p-button-text text-red-600"
+                        (click)="deleteUnit(unit)">
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</p-card>

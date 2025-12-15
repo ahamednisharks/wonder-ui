@@ -1,0 +1,28 @@
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.full {
+    grid-column: span 2;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.save-btn {
+    margin-top: 20px;
+    grid-column: span 2;
+    background: #ff5e6c !important;
+    border: none;
+    padding: 12px !important;
+    border-radius: 8px;
+}
