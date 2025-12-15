@@ -1,0 +1,107 @@
+.logo {
+    height: 100px;
+    width: 100px;
+    background-image: url('./../assets/wonder-bakery-logo.png');
+}
+
+
+/* MAIN LAYOUT */
+.layout-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f7f9fc;
+}
+
+/* ---------- TOP NAVBAR ---------- */
+.topbar {
+    height: 60px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+.topbar-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff5e6c;
+}
+
+.topbar-right i {
+    font-size: 18px;
+    margin-left: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+/* ---------- MAIN CONTENT ---------- */
+.content-area {
+    display: flex;
+    flex: 1;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+    width: 220px;
+    background: white;
+    border-right: 1px solid #e5e5e5;
+    padding-top: 20px;
+}
+
+// .sidebar ul {
+//     list-style: none;
+//     padding: 0;
+// }
+
+// .sidebar li {
+//     padding: 12px 20px;
+//     cursor: pointer;
+//     font-size: 15px;
+//     color: #444;
+//     border-left: 3px solid transparent;
+//     transition: 0.3s;
+// }
+
+// .sidebar li:hover {
+//     background: #ffe6e9;
+//     border-left: 3px solid #ff5e6c;
+// }
+
+// .active {
+//     background: #ffdde1;
+//     color: #ff5e6c;
+//     border-left: 3px solid #ff5e6c !important;
+// }
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sidebar ul li.active {
+    background: #ffd966;
+    font-weight: bold;
+}
+
+.menu-icon {
+    font-size: 20px;
+}
+
+
+/* ---------- PAGE CONTENT ---------- */
+.page-content {
+    flex: 1;
+    padding: 25px;
+}

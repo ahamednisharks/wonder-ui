@@ -1,0 +1,39 @@
+
+
+
+<!-- If route is a plain page (login/register) show only router-outlet -->
+<div *ngIf="!showLayout">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Else show full layout -->
+<div *ngIf="showLayout" class="layout-container">
+
+  <!-- TOP NAVBAR -->
+  <header class="topbar">
+    <div class="topbar-title">Wonder Bakery</div>
+    <div class="topbar-right">
+      <i class="pi pi-bell"></i>
+      <i class="pi pi-user"></i>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="content-area">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <ul>
+        <li *ngFor="let m of menuItems" (click)="navigate(m.route)" [class.active]="currentRoute === m.route">
+          <i [class]="m.icon + ' menu-icon'"></i>
+          {{ m.label }}
+        </li>
+      </ul>
+    </aside>
+
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
