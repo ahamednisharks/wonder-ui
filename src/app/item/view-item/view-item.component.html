@@ -1,0 +1,54 @@
+<p-card header="Item List" class="view-screen">
+
+    <!-- TOP BAR -->
+    <div class="filter-bar">
+
+        <!-- SEARCH BOX -->
+        <div class="search-box">
+            <span class="pi pi-search search-icon"></span>
+            <input pInputText type="text" placeholder="Search" [(ngModel)]="searchText" (input)="applyFilters()" />
+        </div>
+
+        <!-- CATEGORY FILTER -->
+        <p-dropdown [options]="categoryOptions" placeholder="Category" [(ngModel)]="selectedCategory"
+            (onChange)="applyFilters()" class="mr-2"></p-dropdown>
+
+        <!-- UNIT FILTER -->
+        <p-dropdown [options]="unitOptions" placeholder="Unit" [(ngModel)]="selectedUnit"
+            (onChange)="applyFilters()"></p-dropdown>
+
+        <!-- ADD BUTTON -->
+        <button pButton label="Add Item" icon="pi pi-plus" class="p-button-success add-btn"
+        (click)="addItem()" ></button>
+
+    </div>
+
+    <!-- TABLE -->
+    <p-table [value]="filteredItems">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Unit</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.unit }}</td>
+                <td>{{ item.price | currency:'INR' }}</td>
+                <td>
+                    <button pButton icon="pi pi-pencil" class="p-button-text" (click)="editItem(item)"></button>
+                    <button pButton icon="pi pi-trash" class="p-button-text" (click)="deleteItem(item)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</p-card>

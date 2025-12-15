@@ -1,0 +1,55 @@
+<p-card [header]="isEdit ? 'Edit Item' : 'Add Item'" class="add-screen">
+
+  <form [formGroup]="itemForm" class="form-grid">
+
+    <!-- NAME -->
+    <div class="form-field">
+      <label>Item Name</label>
+      <input pInputText formControlName="name">
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="form-field">
+      <label>Category</label>
+      <p-dropdown [options]="categoryList" formControlName="category" placeholder="Select Category">
+      </p-dropdown>
+    </div>
+
+    <!-- UNIT -->
+    <div class="form-field">
+      <label>Unit</label>
+      <p-dropdown [options]="unitList" formControlName="unit" placeholder="Select Unit">
+      </p-dropdown>
+    </div>
+
+    <!-- PRICE -->
+    <div class="form-field">
+      <label>Price</label>
+      <p-inputNumber formControlName="price"></p-inputNumber>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-field full">
+      <label>Description</label>
+      <textarea pInputTextarea rows="3" formControlName="description"></textarea>
+    </div>
+
+
+    <div class="form-field">
+      <p-fileUpload name="itemImage" accept="image/*" customUpload="true" (uploadHandler)="onImageSelect($event)">
+      </p-fileUpload>
+
+      <div class="preview-container" *ngIf="previewImage">
+        <img [src]="previewImage" class="preview-img">
+      </div>
+
+    </div>
+
+    <!-- SAVE BUTTON -->
+    <button pButton class="save-btn" [label]="mode === 'update' ? 'Update Item' : 'Save Item'" [loading]="loading"
+      (click)="submit()">
+    </button>
+
+
+  </form>
+</p-card>
