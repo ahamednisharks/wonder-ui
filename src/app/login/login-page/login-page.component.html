@@ -1,0 +1,63 @@
+<!-- <p>login-page works!</p> -->
+
+
+<div class="login-wrapper">
+
+    <!-- LEFT GRADIENT PANEL -->
+    <div class="left-panel">
+        <div class="left-content">
+            <!-- <h2 class="active-tab">LOGIN</h2>
+            <h3 class="inactive-tab">SIGN IN</h3> -->
+        </div>
+    </div>
+
+    <!-- RIGHT LOGIN PANEL -->
+    <div class="right-panel">
+
+        <div class="logo-section">
+            <!-- <img src="/src/assets/wonder-bakery-logo.png" class="login-logo" alt="Logo" /> -->
+            <img src="assets/wonder-bakery-logo.png" class="login-logo" />
+
+            <h2 class="login-title">L OGIN</h2>
+        </div>
+
+        <form [formGroup]="loginForm" class="login-form">
+
+            <!-- EMAIL -->
+            <div class="input-group">
+                <i class="pi pi-envelope icon"></i>
+                <input pInputText type="text" placeholder="Username" formControlName="username" />
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="input-group">
+                <i class="pi pi-lock icon"></i>
+                <input pPassword [feedback]="false" placeholder="Password" formControlName="password" />
+            </div>
+
+            <a class="forgot">Forgot Password?</a>
+
+            <!-- LOGIN BUTTON -->
+            <button pButton label="LOGIN" class="login-btn" (click)="login()"></button>
+
+        </form>
+
+        <div class="social-login">
+            <p>Or Login with</p>
+
+            <div class="social-buttons">
+                <button class="google-btn">
+                    <img src="assets/google.png" />
+                    Google
+                </button>
+
+                <button class="facebook-btn">
+                    <img src="assets/facebook.png" />
+                    Facebook
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
