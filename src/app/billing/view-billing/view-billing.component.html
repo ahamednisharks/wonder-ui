@@ -1,0 +1,105 @@
+<p-card header="Billing History">
+
+    <!-- ========================== -->
+    <!-- TOP BAR : SEARCH + FILTERS -->
+    <!-- ========================== -->
+
+    <div class="header-bar">
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <input pInputText placeholder="Search bills..."
+                [(ngModel)]="searchText" (input)="applyFilters()" />
+        </div>
+
+        <!-- DATE RANGE -->
+        <p-calendar 
+            [(ngModel)]="dateRange" 
+            selectionMode="range"
+            placeholder="Select Date Range"
+            (onSelect)="applyFilters()">
+        </p-calendar>
+
+        <!-- PAYMENT FILTER -->
+        <p-dropdown 
+            [options]="paymentOptions" 
+            placeholder="Payment Type"
+            [(ngModel)]="selectedPayment"
+            (onChange)="applyFilters()">
+        </p-dropdown>
+
+        <!-- EXPORT BUTTON -->
+        <button 
+            pButton 
+            icon="pi pi-download" 
+            label="Export"
+            class="p-button-info"
+            (click)="exportData()">
+        </button>
+
+        <!-- NEW BILL -->
+        <button 
+            pButton 
+            icon="pi pi-plus" 
+            label="New Bill"
+            class="p-button-success"
+            (click)="goToAddBilling()">
+        </button>
+    </div>
+
+
+    <!-- ========================== -->
+    <!-- BILL TABLE -->
+    <!-- ========================== -->
+    <p-table [value]="filteredBills">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Bill No</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Items</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-bill>
+            <tr>
+                <td>{{ bill.bill_no }}</td>
+                <td>{{ bill.date }}</td>
+                <td>₹ {{ bill.total }}</td>
+                <td>{{ bill.payment }}</td>
+                <td>{{ bill.items }}</td>
+
+                <td class="action-buttons">
+
+                    <!-- VIEW -->
+                    <button 
+                        pButton icon="pi pi-eye" 
+                        class="p-button-text p-button-info"
+                        (click)="viewDetails(bill)">
+                    </button>
+
+                    <!-- EDIT -->
+                    <button 
+                        pButton icon="pi pi-pencil" 
+                        class="p-button-text p-button-warning"
+                        (click)="editBill(bill)">
+                    </button>
+
+                    <!-- DELETE -->
+                    <button 
+                        pButton icon="pi pi-trash" 
+                        class="p-button-text p-button-danger"
+                        (click)="deleteBill(bill)">
+                    </button>
+
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</p-card>
+
+
+<!-- its savea again -->

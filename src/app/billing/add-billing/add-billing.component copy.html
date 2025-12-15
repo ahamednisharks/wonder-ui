@@ -1,0 +1,159 @@
+<div class="outside-box">
+
+    <p-card class="add-screen">
+
+        <div class="billing-container">
+
+            <!-- ============================ -->
+            <!-- BILL TABS + NEW BILL BUTTON  -->
+            <!-- ============================ -->
+            <div class="bill-tabs">
+                <div class="bill-tab" *ngFor="let bill of billTabs; let i = index" [class.active]="activeTab === i"
+                    (click)="switchTab(i)">
+                    Bill {{ i + 1 }}
+
+                    <span class="close-icon" (click)="closeTab(i); $event.stopPropagation()">
+                        ×
+                    </span>
+                </div>
+
+                <button pButton icon="pi pi-plus" class="new-bill-btn" (click)="addNewBill()"></button>
+            </div>
+
+
+            <div class="billing-body">
+
+                <!-- ============================ -->
+                <!-- LEFT SIDE → ITEM SELECTION    -->
+                <!-- ============================ -->
+                <div class="left-panel">
+
+                    <!-- SEARCH -->
+                    <div class="search-area">
+                        <input pInputText type="text" placeholder="Search items..." [(ngModel)]="searchText"
+                            (input)="applyFilters()" />
+                    </div>
+
+                    <!-- CATEGORY BUTTONS -->
+                    <div class="category-buttons">
+                        <button *ngFor="let c of categories" pButton class="cat-btn"
+                            [class.active]="selectedCategory === c.value"
+                            (click)="selectedCategory = c.value; applyFilters()" label="{{ c.label }}">
+                        </button>
+                    </div>
+
+                    <!-- CATEGORY DROPDOWN -->
+                    <div class="category-dropdown category-buttons">
+                        <p-dropdown [options]="categories" placeholder="Select Category" [(ngModel)]="selectedCategory"
+                            (onChange)="applyFilters()" class="cat-dropdown"></p-dropdown>
+                    </div>
+
+                    <!-- ITEM LIST -->
+                    <div class="item-list">
+                        <div class="item-card" *ngFor="let item of filteredItems" (click)="addToCart(item)">
+                            <h3>{{ item.name }}</h3>
+                            <p class="price">₹ {{ item.price }}</p>
+                            <span class="cat">{{ item.category }}</span>
+                        </div>
+
+                        <!-- [ngStyle]="{'background-image': 'url(assets/images/cake.jpg)'}" -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================ -->
+                <!-- RIGHT SIDE → CART + PAYMENT  -->
+                <!-- ============================ -->
+                <div class="right-panel">
+
+                    <!-- CART TABLE -->
+                    <p-card header="Cart">
+                        <p-table [value]="activeItems.controls">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-item="rowData" let-i="rowIndex">
+                                <tr>
+                                    <td>{{ item.name }}</td>
+
+                                    <td class="qty-buttons">
+                                        <button pButton icon="pi pi-minus" class="p-button-text"
+                                        (click)="changeQty(i, 'dec')"></button>
+                                        {{ item.qty }}
+                                        <button pButton icon="pi pi-plus" class="p-button-text"
+                                        (click)="changeQty(i, 'inc')"></button>
+                                    </td>
+
+                                    <td>₹ {{ item.price }}</td>
+                                    <td>₹ {{ item.total }}</td>
+
+                                    <td>
+                                        <button pButton icon="pi pi-trash" class="p-button-danger p-button-text"
+                                        (click)="removeItem(i)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-card>
+
+
+                    <!-- SUMMARY -->
+                    <div class="summary">
+
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>₹ {{ billTabs[activeTab].subtotal }}</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Discount</span>
+                            <input pInputText type="number" [(ngModel)]="billTabs[activeTab].discount"
+                                (input)="calculateTotals()" />
+                        </div>
+
+                        <div class="summary-row total">
+                            <span>Grand Total</span>
+                            <span>₹ {{ billTabs[activeTab].total }}</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT -->
+                    <div class="payment-section">
+
+                        <p-dropdown [options]="[
+                                {label:'Cash', value:'Cash'},
+                                {label:'UPI', value:'UPI'},
+                                {label:'Card', value:'Card'}
+                            ]" [(ngModel)]="billTabs[activeTab].paymentMode" placeholder="Payment Mode"></p-dropdown>
+
+                        <input pInputText type="number" [(ngModel)]="billTabs[activeTab].amountPaid"
+                            (input)="updatePayment()" placeholder="Amount Received" />
+
+                        <div class="balance-box">
+                            Balance: ₹ {{ billTabs[activeTab].balance }}
+                        </div>
+
+                        <button pButton label="Submit Bill" class="submit-btn" (click)="submitBill()"></button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </p-card>
+
+</div>
