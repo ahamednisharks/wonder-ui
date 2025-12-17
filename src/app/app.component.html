@@ -1,6 +1,3 @@
-
-
-
 <!-- If route is a plain page (login/register) show only router-outlet -->
 <div *ngIf="!showLayout">
   <router-outlet></router-outlet>
@@ -11,16 +8,24 @@
 
   <!-- TOP NAVBAR -->
   <header class="topbar">
-    <div class="topbar-title">Wonder Bakery</div>
+
+    <img src="../assets/wonder-bakery-logo.png" alt="Wonder Bakery Logo" class="topbar-logo" style="height: 65px" />
+
+    <div class="topbar-title">
+      Wonder Bakery
+    </div>
+    <!-- img  -->
+
     <div class="topbar-right">
       <i class="pi pi-bell"></i>
       <i class="pi pi-user"></i>
     </div>
   </header>
 
+
   <!-- MAIN CONTENT AREA -->
-  <div class="content-area">
-    <!-- SIDEBAR -->
+  <!-- <div class="content-area">
+    SIDEBAR
     <aside class="sidebar">
       <ul>
         <li *ngFor="let m of menuItems" (click)="navigate(m.route)" [class.active]="currentRoute === m.route">
@@ -31,9 +36,47 @@
     </aside>
 
 
-    <!-- PAGE CONTENT -->
+    PAGE CONTENT
     <main class="page-content">
       <router-outlet></router-outlet>
     </main>
 
+  </div> -->
+
+
+
+  <div class="content-area">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar"
+           [class.open]="isSidebarOpen"
+           (mouseenter)="isSidebarOpen = true"
+           (mouseleave)="isSidebarOpen = false">
+  
+      <ul>
+        <li *ngFor="let m of menuItems"
+            (click)="navigate(m.route)"
+            [class.active]="currentRoute === m.route">
+  
+          <!-- ICON (always visible) -->
+          <i [class]="m.icon + ' menu-icon'"></i>
+  
+          <!-- TEXT (only when open) -->
+          <span class="menu-text" *ngIf="isSidebarOpen">
+            {{ m.label }}
+          </span>
+  
+        </li>
+      </ul>
+  
+    </aside>
+  
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  
   </div>
+  
+
+  

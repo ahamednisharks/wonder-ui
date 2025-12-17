@@ -8,6 +8,8 @@ import { filter, Subscription } from 'rxjs';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  isSidebarOpen = false;
+
   menuItems = [
     { label: 'Dashboard', icon: 'pi pi-home', route: '/dashboard' },
     { label: 'Item Master', icon: 'pi pi-list', route: '/item' },

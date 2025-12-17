@@ -105,3 +105,78 @@
     flex: 1;
     padding: 25px;
 }
+
+
+// --------------------------------
+
+
+/* Sidebar width transition */
+.sidebar {
+    width: 60px;              /* closed */
+    transition: width 0.3s ease;
+    overflow: hidden;
+  }
+  
+  /* Open state */
+  .sidebar.open {
+    width: 220px;             /* open */
+  }
+  
+  /* Menu item layout */
+  .sidebar li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+  }
+  
+  /* Icon always visible */
+  .menu-icon {
+    min-width: 24px;
+    text-align: center;
+  }
+  
+  /* Smooth text appearance */
+  .menu-text {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  
+  /* When sidebar is open, show text smoothly */
+  .sidebar.open .menu-text {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+
+
+
+  ////////////////////////////////////////////////////////////////////
+  /// 
+  /// 
+  /// 
+  /// 
+  
+  /* Smooth hover effect for menu item */
+.sidebar li {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  /* Hover color change */
+  .sidebar li:hover {
+    background-color: rgba(251, 227, 105, 0.711); /* very light overlay */
+  }
+  
+  /* Icon hover effect */
+  .sidebar li:hover .menu-icon {
+    color: inherit; /* keep theme color */
+    opacity: 0.9;
+  }
+  
+  /* Text hover effect */
+  .sidebar li:hover .menu-text {
+    opacity: 1;
+  }
+  
+  
