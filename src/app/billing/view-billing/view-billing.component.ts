@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-view-billing',
@@ -8,17 +9,16 @@ import { Router } from '@angular/router';
 })
 export class ViewBillingComponent implements OnInit {
 
-  bills = [
-    { id: 1, bill_no: 'B001', date: '2025-01-10', total: 340, payment: 'Cash', items: 4 },
-    { id: 2, bill_no: 'B002', date: '2025-01-11', total: 520, payment: 'UPI', items: 6 },
-    { id: 3, bill_no: 'B003', date: '2025-01-12', total: 120, payment: 'Card', items: 2 },
-  ];
-
-  filteredBills = [...this.bills];
+  // bills: any[] = [];
+  filteredBills: any[] = [];
 
   searchText = '';
   dateRange: any;
   selectedPayment: any = null;
+
+  loading = false;
+  errorMessage = '';
+  bills = [ { id: 1, bill_no: 'B001', date: '2025-01-10', total: 340, payment: 'Cash', items: 4 }, { id: 2, bill_no: 'B002', date: '2025-01-11', total: 520, payment: 'UPI', items: 6 }, { id: 3, bill_no: 'B003', date: '2025-01-12', total: 120, payment: 'Card', items: 2 }, ];
 
   paymentOptions = [
     { label: 'All', value: null },
@@ -27,37 +27,49 @@ export class ViewBillingComponent implements OnInit {
     { label: 'Card', value: 'Card' }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private api: ApiService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getList();
+  }
+
+  // ------------------ API LIST ------------------
+
+  getList() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    const payload = {
+      search: this.searchText || null,
+      fromDate: this.dateRange?.[0] || null,
+      toDate: this.dateRange?.[1] || null,
+      paymentMode: this.selectedPayment
+    };
+
+    // ✅ POST ONLY (as you requested)
+    this.api.post('billing/list', payload)
+      .subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          
+          this.bills = res || [];
+          this.filteredBills = [...this.bills];
+        },
+        error: () => {
+          this.loading = false;
+          this.errorMessage = 'Unable to load bills.';
+        }
+      });
+  }
 
   // -------------- FILTER LOGIC ------------------
 
   applyFilters() {
-    this.filteredBills = this.bills.filter(bill => {
-
-      // Search filter
-      const matchesSearch = 
-          bill.bill_no.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          bill.payment.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          bill.date.toLowerCase().includes(this.searchText.toLowerCase());
-
-      // Payment filter
-      const matchesPayment =
-        !this.selectedPayment || bill.payment === this.selectedPayment;
-
-      // Date filter
-      let matchesDate = true;
-      if (this.dateRange && this.dateRange.length === 2) {
-        const billDate = new Date(bill.date);
-        const from = new Date(this.dateRange[0]);
-        const to = new Date(this.dateRange[1]);
-
-        matchesDate = billDate >= from && billDate <= to;
-      }
-
-      return matchesSearch && matchesPayment && matchesDate;
-    });
+    // If filtering is server-side, just call API again
+    this.getList();
   }
 
   // -------------- ACTIONS ------------------
@@ -67,22 +79,23 @@ export class ViewBillingComponent implements OnInit {
   }
 
   viewDetails(bill: any) {
-    console.log("VIEW BILL", bill);
+    console.log('VIEW BILL', bill);
   }
 
-  editBill(bill: any) {
-    console.log("EDIT BILL", bill);
-  }
 
   deleteBill(bill: any) {
     if (confirm(`Delete ${bill.bill_no}?`)) {
-      this.bills = this.bills.filter(b => b.id !== bill.id);
-      this.applyFilters();
+      // call delete API later
+      console.log('DELETE BILL', bill.id);
     }
   }
 
   exportData() {
-    console.log("Exporting… work in progress");
+    console.log('Exporting… work in progress');
   }
 
+  editBill(bill: any) {
+    this.router.navigate(['/billing/add-billing', bill.id]);
+  }
+  
 }
