@@ -1,0 +1,43 @@
+// .toast {
+//     position: fixed;
+//     top: 20px;
+//     right: 20px;
+//     padding: 12px 18px;
+//     border-radius: 6px;
+//     color: #fff;
+//     z-index: 9999;
+//   }
+
+
+.toast {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    min-width: 250px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    z-index: 100000; // 🔥 very important
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+
+    color: #fff;               // text
+    background-color: #333;    // 👈 REQUIRED
+}
+
+.success {
+    background-color: #2e7d32;
+    color: #fff;
+  }
+  
+  .error {
+    background-color: #d32f2f;
+    color: #fff;
+  }
+  
+  .warning {
+    background-color: #ed6c02;
+    color: #fff;
+  }
+  

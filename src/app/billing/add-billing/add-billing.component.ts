@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../../service/api.service';
 import { MessageService } from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-add-billing',
@@ -22,13 +24,47 @@ export class AddBillingComponent implements OnInit {
   selectedCategory: any = null;
   searchText = '';
 
+  // Edit Bill
+  mode!: string;
+  billId!: string;
+  isEdit = false;
+
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
-    private message: MessageService
-  ) {}
+    private message: MessageService,
+    private route: ActivatedRoute
+  ) {
+    this.billingForm = this.fb.group({
+      paymentMode: [''],
+      discount: [0],
+      amountPaid: [0]
+    });
+
+    this.billingForm.valueChanges.subscribe(() => {
+      this.calculateTotals();
+    });
+  }
 
   ngOnInit(): void {
+
+    this.route.paramMap.subscribe(params => {
+      this.mode = params.get('mode')!;
+      this.billId = params.get('value')!;
+
+      if (this.mode === 'update' && this.billId) {
+        this.isEdit = true;
+        this.loadBill(this.billId);
+      }
+
+      if (this.mode === 'view' && this.billId) {
+        // this.isEdit = true;
+        this.loadBill(this.billId);
+        this.billingForm.disable();
+
+      }
+    });
+
     this.initForm();
     this.loadItemsData();
     this.loadCategoryData();
@@ -45,6 +81,18 @@ export class AddBillingComponent implements OnInit {
 
   get activeItems(): FormArray {
     return this.activeBill?.get('items') as FormArray;
+  }
+
+  get tabsFA(): FormArray {
+    return this.billingForm.get('tabs') as FormArray;
+  }
+  
+  get billTabFG(): FormGroup {
+    return this.tabsFA.at(0) as FormGroup;
+  }
+  
+  get itemsFA(): FormArray {
+    return this.billTabFG.get('items') as FormArray;
   }
 
   // ---------------- INIT ----------------
@@ -65,6 +113,92 @@ export class AddBillingComponent implements OnInit {
       balance: 0
     });
   }
+
+  createItem(item?: any): FormGroup {
+    return this.fb.group({
+      id: [item?.id || null],
+      name: [item?.name || ''],
+      qty: [item?.qty || 1],
+      price: [item?.price || 0],
+      total: [item?.total || 0]
+    });
+  }
+
+
+  loadBill(id: string) {
+    
+
+    this.api.post(`billing/get`, { id: id })
+      .subscribe({
+        next: (res: any) => {
+          const bill = res;
+
+          
+
+
+          // 🔹 Patch normal fields
+          this.billTabFG.patchValue({
+            subtotal: Number(bill.subtotal),
+            discount: Number(bill.discount),
+            total: Number(bill.total),
+            paymentMode: bill.payment_mode,
+            amountPaid: Number(bill.amount_paid),
+            balance: Number(bill.balance)
+          });
+
+          // 🔹 Clear existing items
+          // this.itemsFA.clear();
+          while (this.itemsFA.length !== 0) {
+            this.itemsFA.removeAt(0);
+          }
+
+          // 🔹 Patch FormArray items
+          // bill.items.forEach((item: any) => {
+          //   this.itemsFA.push(this.createItem({
+          //     id: item.product_id,
+          //     name: item.product_name,
+          //     qty: Number(item.qty),
+          //     price: Number(item.price),
+          //     total: Number(item.total)
+          //   }));
+          // });
+
+          // bill.items.forEach((item: any) => {
+          //   this.itemsFA.push(this.createItemFG(item));
+          // });
+
+
+          // Clear items (Angular version safe)
+          while (this.itemsFA.length > 0) {
+            this.itemsFA.removeAt(0);
+          }
+
+          // Patch items
+          bill.items.forEach((item: any) => {
+            this.itemsFA.push(this.fb.group({
+              id: item.product_id,
+              name: item.product_name,
+              qty: item.qty,
+              price: item.price,
+              total: item.total
+            }));
+          });
+
+          if(this.mode == 'view') {
+            this.billingForm.disable(); // ✅ move here
+          }
+
+          console.log('Items patched:', this.itemsFA.value);
+
+          // 🔹 Recalculate totals
+          this.calculateTotals();
+        },
+        error: () => {
+          alert('Failed to load bill details');
+        }
+      });
+  }
+
 
   // ---------------- BILL TABS ----------------
   addNewBill(): void {
@@ -167,20 +301,42 @@ export class AddBillingComponent implements OnInit {
   }
 
   // ---------------- TOTALS ----------------
+  // calculateTotals(): void {
+  //   debugger
+  //   const subtotal = this.activeItems.value.reduce(
+  //     (sum: number, x: any) => sum + x.total,
+  //     0
+  //   );
+
+  //   const discount = Number(this.activeBill.get('discount')?.value) ?? 0;
+  //   const amountPaid = Number(this.activeBill.get('amountPaid')?.value) ?? 0;
+
+  //   const total = Number(subtotal) - Number(discount);
+  //   const balance = amountPaid - total;
+
+  //   this.activeBill.patchValue({ subtotal, total, balance });
+  // }
+
   calculateTotals(): void {
+
     const subtotal = this.activeItems.value.reduce(
-      (sum: number, x: any) => sum + x.total,
+      (sum: number, x: any) => sum + Number(x.total || 0),
       0
     );
-
-    const discount = this.activeBill.get('discount')?.value ?? 0;
-    const amountPaid = this.activeBill.get('amountPaid')?.value ?? 0;
-
+  
+    const discount = Number(this.activeBill.get('discount')?.value || 0);
+    const amountPaid = Number(this.activeBill.get('amountPaid')?.value || 0);
+  
     const total = subtotal - discount;
     const balance = amountPaid - total;
-
-    this.activeBill.patchValue({ subtotal, total, balance });
+  
+    this.activeBill.patchValue({
+      subtotal,
+      total,
+      balance
+    });
   }
+  
 
   // ---------------- SUBMIT ----------------
   submitBill(): void {
@@ -218,4 +374,16 @@ export class AddBillingComponent implements OnInit {
   updatePayment() {
     this.calculateTotals();
   }
+
+
+  createItemFG(item?: any): FormGroup {
+    return this.fb.group({
+      id: [item?.id || item?.product_id || null],
+      name: [item?.name || item?.product_name || ''],
+      qty: [item?.qty || 1],
+      price: [item?.price || 0],
+      total: [item?.total || 0]
+    });
+  }
+
 }

@@ -1,5 +1,7 @@
 <!-- If route is a plain page (login/register) show only router-outlet -->
 <div *ngIf="!showLayout">
+  
+
   <router-outlet></router-outlet>
 </div>
 
@@ -46,6 +48,7 @@
 
 
   <div class="content-area">
+    <app-toast></app-toast>
 
     <!-- SIDEBAR -->
     <aside class="sidebar"
@@ -73,6 +76,7 @@
   
     <!-- PAGE CONTENT -->
     <main class="page-content">
+      <!-- <app-toast></app-toast> -->
       <router-outlet></router-outlet>
     </main>
   

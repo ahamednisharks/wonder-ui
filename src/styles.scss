@@ -59,6 +59,16 @@
 
 
 .add-screen {
+
+    // .p-component {
+    //     height: 80vh !important;
+    //     overflow: scroll;
+    // }
+    .p-card {
+        height: 85vh;
+        overflow: scroll;
+    }
+
     .form-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);

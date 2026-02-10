@@ -79,7 +79,7 @@ export class ViewBillingComponent implements OnInit {
   }
 
   viewDetails(bill: any) {
-    console.log('VIEW BILL', bill);
+    this.router.navigate(['/billing/add-billing', { mode: 'view', value: bill.id }]);
   }
 
 
@@ -95,7 +95,9 @@ export class ViewBillingComponent implements OnInit {
   }
 
   editBill(bill: any) {
-    this.router.navigate(['/billing/add-billing', bill.id]);
+    
+    this.router.navigate(['/billing/add-billing', { mode: 'update', value: bill.id }]);
   }
+
   
 }

@@ -15,7 +15,14 @@ export class AppComponent {
     { label: 'Item Master', icon: 'pi pi-list', route: '/item' },
     { label: 'Unit Master', icon: 'pi pi-tags', route: '/unit' },
     { label: 'Billing', icon: 'pi pi-shopping-cart', route: '/billing' },
-    { label: 'Transactions', icon: 'pi pi-wallet', route: '/transactions' }
+    // { label: 'Orders', icon: 'pi pi-cart', route: '/orders' },
+    
+    
+    { label: 'Combo Master', icon: 'pi pi-tag', route: '/orders' },
+
+    { label: 'Orders', icon: 'pi pi-shopping-bag', route: '/orders' },
+    { label: 'Transactions', icon: 'pi pi-wallet', route: '/transactions' },
+    { label: 'Social Media', icon: 'pi pi-share-alt', route: '/socialmedia' }
   ];
 
   title = 'wonder-bakery';

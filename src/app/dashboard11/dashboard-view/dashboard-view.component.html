@@ -1,0 +1,169 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>The Baker's Command Center</h1>
+    </div>
+  
+    <div class="dashboard-grid">
+      <!-- Top Metrics Row -->
+      <div class="metric-card">
+        <div class="metric-label">Daily Revenue:</div>
+        <div class="metric-value">${{ dailyRevenue.toLocaleString() }}</div>
+        <div class="metric-subtitle">
+          vs yesterday 
+          <span class="positive">+{{ revenueChange }}%</span>
+        </div>
+      </div>
+  
+      <div class="metric-card">
+        <div class="metric-label">Order Volume:</div>
+        <div class="metric-value">{{ orderVolume }}</div>
+        <div class="metric-subtitle">Transactions</div>
+      </div>
+  
+      <div class="metric-card">
+        <div class="metric-label">Top Seller</div>
+        <div class="metric-icon">🥖</div>
+        <div class="metric-subtitle">{{ topSeller }}</div>
+      </div>
+  
+      <div class="metric-card alert-card">
+        <div class="metric-label">Low Stock Alerts</div>
+        <div class="metric-value">{{ lowStockCount }} Items -</div>
+        <div class="alert-text">ACTION REQUIRED</div>
+      </div>
+  
+      <!-- Sales Velocity Chart -->
+      <div class="chart-card sales-velocity">
+        <h3>Sales Velocity <span class="subtitle">(Today)</span></h3>
+        <div class="chart-container">
+          <div class="y-axis">
+            <span>30%</span>
+            <span>31%</span>
+            <span>4%</span>
+            <span>2%</span>
+            <span>1%</span>
+            <span>0</span>
+          </div>
+          <div class="chart-area">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#d87856;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#d87856;stop-opacity:0.05" />
+                </linearGradient>
+              </defs>
+              <path d="M 0,198 L 0,195 L 100,190 L 200,170 L 300,165 L 400,20 L 400,200 Z" 
+                    fill="url(#areaGradient)" />
+              <polyline points="0,195 100,190 200,170 300,165 400,20" 
+                        fill="none" stroke="#d87856" stroke-width="3" />
+              <circle cx="0" cy="195" r="4" fill="#d87856" />
+              <circle cx="100" cy="190" r="4" fill="#d87856" />
+              <circle cx="200" cy="170" r="4" fill="#d87856" />
+              <circle cx="300" cy="165" r="4" fill="#d87856" />
+              <circle cx="400" cy="20" r="4" fill="#d87856" />
+            </svg>
+            <div class="x-axis">
+              <span>8 AM</span>
+              <span>8 AM</span>
+              <span>9 AM</span>
+              <span>9 AM</span>
+            </div>
+          </div>
+          <div class="peak-info">
+            <strong>Peak Hours:</strong><br>
+            {{ peakHours }}
+          </div>
+        </div>
+      </div>
+  
+      <!-- Product Mix Chart -->
+      <div class="chart-card product-mix">
+        <h3>Product Mix</h3>
+        <div class="donut-container">
+          <svg viewBox="0 0 200 200" class="donut-chart">
+            <circle cx="100" cy="100" r="80" fill="none" 
+                    stroke="#8b6f47" stroke-width="50" 
+                    stroke-dasharray="150.8 351.86" 
+                    transform="rotate(-90 100 100)" />
+            <circle cx="100" cy="100" r="80" fill="none" 
+                    stroke="#a8c4a8" stroke-width="50" 
+                    stroke-dasharray="75.4 427.26" 
+                    stroke-dashoffset="-150.8"
+                    transform="rotate(-90 100 100)" />
+            <circle cx="100" cy="100" r="80" fill="none" 
+                    stroke="#d4a574" stroke-width="50" 
+                    stroke-dasharray="226.2 276.46" 
+                    stroke-dashoffset="-226.2"
+                    transform="rotate(-90 100 100)" />
+            <circle cx="100" cy="100" r="80" fill="none" 
+                    stroke="#d87856" stroke-width="50" 
+                    stroke-dasharray="150.8 351.86" 
+                    stroke-dashoffset="-452.4"
+                    transform="rotate(-90 100 100)" />
+            <circle cx="100" cy="100" r="50" fill="#f5f1e8" />
+          </svg>
+          <div class="legend">
+            <div class="legend-item">
+              <span class="color-box" style="background: #d4a574;"></span>
+              Pastries (45%)
+            </div>
+            <div class="legend-item">
+              <span class="color-box" style="background: #d87856;"></span>
+              Coffee & Drinks ☕
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Waste vs Sold Chart -->
+      <div class="chart-card waste-chart">
+        <h3>Waste vs Sold (Pastries)</h3>
+        <div class="bar-chart">
+          <div class="bar-group" *ngFor="let item of wasteData">
+            <div class="bars">
+              <div class="bar sold" 
+                   [style.height.%]="getChartHeight(item.sold, 100)"
+                   *ngIf="item.sold > 0">
+                <span class="bar-label" *ngIf="item.sold > 0">Sold ({{ item.sold }})</span>
+              </div>
+              <div class="bar waste" 
+                   [style.height.%]="getChartHeight(item.waste, 100)"
+                   *ngIf="item.waste > 0">
+                <span class="bar-label" *ngIf="item.waste > 0">Waste ({{ item.waste }})</span>
+              </div>
+            </div>
+            <div class="bar-label-x">{{ item.name }}</div>
+          </div>
+        </div>
+        <div class="alert-box">
+          🥐 {{ alertMessage }}
+        </div>
+      </div>
+  
+      <!-- Ingredient Levels -->
+      <div class="chart-card ingredient-levels">
+        <h3>Ingredient Levels</h3>
+        <div class="heatmap">
+          <div class="heatmap-row" *ngFor="let ingredient of ingredients">
+            <div class="row-label">{{ ingredient.name }}</div>
+            <div class="cells">
+              <div class="cell" 
+                   *ngFor="let level of ingredient.levels"
+                   [class.high]="level === 'high'"
+                   [class.medium]="level === 'medium'"
+                   [class.low]="level === 'low'">
+                <span *ngIf="level === 'low'" class="low-label">LOW</span>
+              </div>
+            </div>
+          </div>
+          <div class="column-labels">
+            <span>Bil-Pee<br>All-Poruase</span>
+            <span>Wheat</span>
+            <span></span>
+            <span></span>
+            <span>Sugar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

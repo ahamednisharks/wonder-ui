@@ -1,0 +1,32 @@
+.item-table {
+    min-height: 300px;
+}
+
+
+
+// :host ::ng-deep .p-dropdown-panel {
+//     min-width: 100% !important;
+//   }
+
+
+/* Force same height for all form controls */
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-inputnumber input {
+    height: 42px;
+    align-items: center;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    line-height: 42px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+:host ::ng-deep .p-table td {
+    vertical-align: middle;
+}
+
+.form-cell {
+    padding: 6px 8px;
+}

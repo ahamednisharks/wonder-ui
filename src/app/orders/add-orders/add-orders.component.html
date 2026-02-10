@@ -1,0 +1,164 @@
+<p-card header="Add Order" class="add-screen">
+
+    <form [formGroup]="orderForm" class="form-grid">
+  
+      <!-- ORDER INFO -->
+      <div class="form-field">
+        <label>Order No</label>
+        <input pInputText formControlName="orderNo" [disabled]="true">
+      </div>
+  
+      <div class="form-field">
+        <label>Order Date</label>
+        <p-calendar formControlName="orderDate" dateFormat="dd-mm-yy"></p-calendar>
+      </div>
+  
+      <!-- CUSTOMER -->
+      <div class="form-field">
+        <label>Customer Name</label>
+        <input pInputText formControlName="customerName">
+      </div>
+  
+      <div class="form-field">
+        <label>Customer Number</label>
+        <input pInputText formControlName="customerPhone">
+      </div>
+  
+      <div class="form-field">
+        <label>Additional Phone</label>
+        <input pInputText formControlName="customerAltPhone">
+      </div>
+  
+      <!-- DELIVERY -->
+      <div class="form-field">
+        <label>Delivery Date & Time</label>
+        <p-calendar
+            formControlName="deliveryDateTime"
+            [showTime]="true"
+            hourFormat="12">
+        </p-calendar>
+
+      </div>
+  
+      <div class="form-field">
+        <label>Delivery Location</label>
+        <p-dropdown
+            [options]="deliveryLocationOptions"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="deliveryLocationType">
+        </p-dropdown>
+      </div>
+  
+      <div class="form-field full" *ngIf="orderForm.value.deliveryLocationType === 'OTHERS'">
+        <label>Delivery Address</label>
+        <textarea pInputTextarea formControlName="deliveryAddress"></textarea>
+      </div>
+  
+      <div class="form-field">
+        <label>Delivery Charge</label>
+        <p-inputNumber formControlName="deliveryCharge" (onInput)="calculateTotal()"></p-inputNumber>
+      </div>
+  
+      <!-- ITEMS -->
+      <div class="form-field full item-table">
+        <p-table [value]="items.controls" dataKey="index">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Unit</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Notes</th>
+              <th>Design</th>
+              <th></th>
+            </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="body" let-row let-i="rowIndex">
+            <tr [formGroup]="row">
+              <td class="form-cell">
+                <!-- <p-dropdown
+                  [options]="itemsList"
+                  optionLabel="name"
+                  optionValue="id"
+                  formControlName="itemId"
+                  (onChange)="onItemSelect(i)">
+                </p-dropdown> -->
+                <p-dropdown
+                    [options]="itemsMaster"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select Item"
+                    formControlName="itemId"
+                    appendTo="body"
+                    (onChange)="onItemSelect(i)">
+                    </p-dropdown>
+
+              </td>
+  
+              <td class="form-cell"><input pInputText formControlName="category" [disabled]="true"></td>
+              <td class="form-cell"><input pInputText formControlName="unit" [disabled]="true"></td>
+  
+              <td class="form-cell">
+                <p-inputNumber formControlName="quantity" (onInput)="calculateTotal()"></p-inputNumber>
+              </td>
+  
+              <td class="form-cell">
+                <p-inputNumber formControlName="price" (onInput)="calculateTotal()"></p-inputNumber>
+              </td>
+  
+              <td class="form-cell">
+                <input pInputText formControlName="notes">
+              </td>
+  
+              <td class="form-cell">
+                <!-- <p-fileUpload mode="basic" chooseLabel="Upload"></p-fileUpload> -->
+                <p-fileUpload
+                mode="basic"
+                chooseLabel="Upload"
+                customUpload="true"
+                (onSelect)="onDesignSelect($event, i)">
+              </p-fileUpload>
+              
+              </td>
+  
+              <td class="form-cell">
+                <button pButton icon="pi pi-trash" class="p-button-text"
+                  (click)="removeItemRow(i)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+  
+        <button pButton label="Add Item" icon="pi pi-plus"
+          class="p-button-sm mt-2" (click)="addItemRow()"></button>
+      </div>
+  
+      <!-- CASH -->
+      <div class="form-field">
+        <label>Total Amount</label>
+        <p-inputNumber formControlName="totalAmount" [disabled]="true"></p-inputNumber>
+      </div>
+  
+      <div class="form-field">
+        <label>Discount</label>
+        <p-inputNumber formControlName="discount" (onInput)="calculateTotal()"></p-inputNumber>
+      </div>
+  
+      <div class="form-field">
+        <label>Advance Amount</label>
+        <p-inputNumber formControlName="advanceAmount"></p-inputNumber>
+      </div>
+  
+      <div class="form-field">
+        <label>Payment</label>
+        <p-inputNumber formControlName="paymentAmount"></p-inputNumber>
+      </div>
+  
+      <button pButton label="Save Order" class="save-btn" (click)="submit()"></button>
+  
+    </form>
+  </p-card>
+  

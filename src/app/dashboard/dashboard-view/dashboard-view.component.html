@@ -1,0 +1,70 @@
+<div class="dashboard">
+    <!-- <div class="date-filter">
+        <select (change)="onDateChange($event.target.value)">
+          <option value="today">Today</option>
+          <option value="month">This Month</option>
+          <option value="lastMonth">Last Month</option>
+        </select>
+      </div> -->
+
+    <!-- <select #dateSelect (change)="onDateChange(dateSelect.value)">
+        <option value="today">Today</option>
+        <option value="month">This Month</option>
+        <option value="lastMonth">Last Month</option>
+      </select> -->
+
+
+    <div class="date-range">
+        <input type="date" [(ngModel)]="fromDate">
+        <span>to</span>
+        <input type="date" [(ngModel)]="toDate">
+        <button (click)="applyDateRange()">Apply</button>
+    </div>
+
+
+
+    <!-- QUICK STATS -->
+    <div class="stats">
+        <div class="card" *ngFor="let s of stats">
+            <div class="card-title">{{ s.title }}</div>
+            <div class="card-value">{{ s.displayValue }}</div>
+            <div class="card-sub" [class.up]="s.trend > 0">
+                {{ s.trend > 0 ? '↑' : '↓' }} {{ s.trend }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- SALES TREND -->
+    <div class="grid">
+        <div class="panel">
+            <h3>Sales Trend</h3>
+            <canvas id="salesTrend"></canvas>
+        </div>
+
+        <div class="panel">
+            <h3>Item Wise Sales</h3>
+            <canvas id="itemSales"></canvas>
+        </div>
+    </div>
+
+    <!-- ORDERS + EXPENSE -->
+    <div class="grid">
+        <div class="panel">
+            <h3>Orders by Month</h3>
+            <canvas id="ordersChart"></canvas>
+        </div>
+
+        <div class="panel">
+            <h3>Expense vs PO vs PE</h3>
+            <canvas id="expenseChart"></canvas>
+        </div>
+    </div>
+
+    <!-- SMART INSIGHTS -->
+    <div class="insights">
+        <div class="insight" *ngFor="let i of insights">
+            💡 {{ i }}
+        </div>
+    </div>
+
+</div>

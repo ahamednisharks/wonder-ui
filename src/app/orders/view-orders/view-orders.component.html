@@ -1,0 +1,67 @@
+<p-card header="Orders List" class="view-screen">
+
+    <div class="filter-bar">
+  
+      <div class="search-box">
+        <span class="pi pi-search search-icon"></span>
+        <input pInputText placeholder="Search">
+      </div>
+  
+      <p-dropdown placeholder="Status"></p-dropdown>
+      <p-dropdown placeholder="Bill Generated"></p-dropdown>
+
+      <!-- ADD ORDER BUTTON -->
+    <button
+        pButton
+        label="Add Order"
+        icon="pi pi-plus"
+        class="p-button-success add-btn"
+        (click)="goToAddOrder()">
+    </button>
+  
+    </div>
+  
+    <p-table [value]="orders">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Order No</th>
+          <th>Order Date</th>
+          <th>Customer</th>
+          <th>Phone</th>
+          <th>Advance</th>
+          <th>Payment</th>
+          <th>Delivery</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-o>
+        <tr>
+          <td>{{ o.orderNo }}</td>
+          <td>{{ o.orderDate | date:'dd-MM-yyyy' }}</td>
+          <td>{{ o.customerName }}</td>
+          <td>{{ o.customerPhone }}</td>
+          <td>{{ o.advanceAmount }}</td>
+          <td>{{ o.paymentAmount }}</td>
+          <td>{{ o.deliveryDateTime | date:'dd-MM-yyyy hh:mm a' }}</td>
+          <td>{{ o.deliveryLocation }}</td>
+          <td>{{ o.status }}</td>
+          <td>
+            <button pButton icon="pi pi-pencil" class="p-button-text"
+              [disabled]="o.billGenerated"></button>
+  
+            <button pButton icon="pi pi-file" class="p-button-text"
+              [disabled]="!o.billGenerated"></button>
+  
+            <button pButton icon="pi pi-times" class="p-button-text"></button>
+  
+            <button pButton icon="pi pi-download" class="p-button-text" (click)="downloadBill(o)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+  </p-card>
+  
